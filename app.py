@@ -36,5 +36,17 @@ def add_task():
 
     return jsonify(task), 201
 
+@app.route("/tasks/<int:task_id>/complete", methods=["POST"])
+def complete_task(task_id):
+    tasks = load_tasks()
+
+    for task in tasks:
+        if task["id"] == task_id:
+            task["done"] = True
+            save_tasks(tasks)
+            return jsonify(task)
+
+    return jsonify({"error": "Task not found"}), 404
+
 if __name__ == "__main__":
     app.run(debug=True)
